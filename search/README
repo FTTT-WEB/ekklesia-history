@@ -1,0 +1,116 @@
+DGS Search v0.9.6 (02/07/01) - http://www.digitalgenesis.com
+
+  Copyright (C) 2000-2001 Digital Genesis Software. All rights reserved.
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License <http://www.gnu.org/copyleft/gpl.html>
+  for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+Maintainer:
+
+  Digital Genesis Software, LLC. <search@digitalgenesis.com>
+  http://www.digitalgenesis.com
+
+Supported Platforms:
+
+  UNIX based platforms (ie: Linux, FreeBSD, Solaris, etc.)
+  Windows9x/NT/2000 platforms.
+  Supported databases types: MySQL, PgSQL, MSSQL, InterBase, and ODBC.
+
+Requirements: 
+
+  PHP v3.0.7+, PHP v4.0.0+ (Tested with 3.0.12, 4.0.0, 4.0.1pl2, 4.0.4)
+  PHP enabled Web Server (Tested with Apache 1.3.x and IIS 4.0)
+  Optional Database (Tested with MySQL 3.2x.x, MSSQL 7.0 and FoxPro 2.6.)
+
+Description:
+
+  DGS Search was created to provide an easy to install search utility capable of
+  handling filesystem and database searches on UNIX and Windows based platforms.
+  This package is aimed at supporting the small to medium sized web site.
+
+Installation:
+
+  See INSTALL for installation instructions.
+
+  Digital Genesis Software, LLC can also install DGS Search on your Linux/UNIX
+  based system. Email sales@digitalgenesis.com for prices or information on
+  this or other services we offer.
+  
+Upgrades:
+
+  See UPGRADE for upgrading instructions.
+  
+Support:
+
+  If you have questions regarding the install of DGS Search, feel free to email
+  search@digitalgenesis.com. Please do not email questions regarding the install
+  of Apache, PHP, or your database software.
+
+  For help with other software, see their sites:
+    PHP - http://www.php.net
+    Apache - http://www.apache.org
+    MySQL - http://www.mysql.com
+    IIS/MSSQL - http://www.microsoft.com
+
+Suggestions:
+
+  If you have suggestions, comments or patches for DGS Search, please email them
+  to search@digitalgenesis.com.
+
+Patches:
+
+  If you have fixed a bug or added a new feature to DGS Search and would like
+  to submit your patches to us, please create a unified diff as follows:
+
+    tar xvzf dgssearch-x.x.x.tar.gz
+    mv dgssearch modified-dgssearch
+
+  Make your changes to 'modified-dgssearch'.
+
+    tar xvzf dgssearch-x.x.x.tar.gz
+    diff -urN dgssearch modified-dgssearch
+    -or-
+    diff -u --recursive --new-file dgssearch modified-dgssearch
+
+  Then email the diff to search@digitalgenesis.com and we will put it on our site,
+  or we may even merge it into the next release.
+
+Misc:
+
+  All source files were created with a tab-space of 3.
+
+  The images directory contains dgssearch_button.jpg. It is a "Powered by DGS Search"
+  button that can be displayed on your site. If you choose to link to our site, please
+  link to http://www.digitalgenesis.com.
+
+Credits:
+
+  Dan Pasch/Empire-Web - Original specification for project and images. (http://www.empire-web.net)
+  James Sella/DGS - Frontend search functions, backend modifications and documentation.
+  William Sella/DGS - Backend Filesystem search functions.
+  Max Spaulding/DGS - Backend Database search functions.
+
+About DGS:
+
+  Digital Genesis Software, LLC is a custom software firm that specializes
+  in Linux/UNIX and network application development.  We have development
+  experience using C/C++, Perl, PHP, Java Servlets, JSP and shell script. We
+  are also experienced with database development, TCP/IP application design
+  and Linux/UNIX server administration.
+
+  If you have an open-source project you would like extended, need a CGI
+  written or are looking for a system administrator for your Linux/UNIX
+  based server(s), please let us know at sales@digitalgenesis.com or visit
+  our website at http://www.digitalgenesis.com.

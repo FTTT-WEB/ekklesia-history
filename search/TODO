@@ -1,0 +1,18 @@
+DGS Search v0.9.6 (02/07/01) - http://www.digitalgenesis.com
+
+ToDo:
+
+  Add support for keyword, boolean, and phrase searches.
+  Add a ranking system and sort results by rank.
+  Add the option and support for indexed searches.
+  Add module for searching Cricket (http://cricket.sourceforge.net) configuration trees.
+  Improve db module so it can deal with ambiguous names between tables in joins.
+  Add support for a .dgssearch file so you can specify within a directory to exclude all files or specific files, instead of listing them in the config. 
+  Add a page (with a link from index.php) that describes how searches are performed.
+  Improve META 'description' support.
+  Virtual Server support.
+  In VerifyConfig() need to fix symlink checks. If the symlink is relative, it fails. This maybe the case with other symlinks too??
+  Attempt to store the current index within the cache, so we don't have to refind items. Should just be able to save a line number, or we could also try to serialize the string.
+  Make sure pdf/doc, etc URLS don't give a tranlate option on the results page.
+  Sort cache file contents before searching, based on last modification times, etc
+  Cleanup remote debug config display option a bit.

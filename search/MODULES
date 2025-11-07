@@ -1,0 +1,106 @@
+DGS Search v0.9.6 (02/07/01) - http://www.digitalgenesis.com
+
+Description:
+
+   Modules are nothing more than a php source file containing a function of the same name.
+   The module name is the name of the file, minus the ".php" extension.
+
+   Search modules will go in the 'libs/search' directory and display modules go in the
+   'libs/display' directory.
+
+   All module functions must accept the variables: $retVal, $q, $r, $o, $s and $c.
+   Search module function must also return $retVal.
+
+Variables:
+
+   $retVal - Array value. This is the results used to build the Search Result page.
+             The array takes the following form:
+
+             array('link' => '', 'url' => '', 'description' => '', 'fileSize' => 0, 'lastMod' => '', 'source' => '')
+
+             NOTE: If "fileSize" or "lastMod" are left out of the array, they will not be
+                   displayed on the Search Results page. "source" is the name of the module
+                   generating the result.
+
+   $q      - String value. This is the submitted query.
+
+   $r      - Integer value. This is the number of results to display per page.
+             If this value is 0, then all results are displayed.
+
+   $o      - Integer value. Offset into $retVal of the current results that will be displayed.
+
+   $s      - Integer value. This cached size of the $retVal from a previous search.
+
+   $c      - Integer value. This is the current count of matches at the time of calling this
+             search function.
+
+Example:
+
+   <?php
+
+   /*
+   ** DGS Search
+   ** body.php written by James M. Sella
+   ** Search a body for loose items.
+   */
+
+   function body($retVal, $q, $r, $o, $s, $c) {
+      switch ($q) {
+         case 'pockets':
+            $found = 'Loose Change';
+            $desc = 'You found 3 gold and 1 silver.';
+            break;
+         case 'hands':
+            $found = 'Ring';
+            $desc = 'You found a ring to rule them all.';
+            break;
+         case 'shoes':
+            $found = 'Socks';
+            $desc = 'You found a smelly pair of socks.';
+            break;
+         default:
+            $found = 'Nothing';
+            $desc = 'You found nothing.';
+      }
+      $retVal[] = array('link' => $found, 'url' => 'http://www.domain.com', 'description' => $desc, 'source' => 'body');
+      return $retVal;
+   }
+
+   ?>
+
+Walk-Through:
+
+   To create a search module, do the following.
+
+   0. Pick a module name.
+
+      We will pick 'body'.
+
+   1. Open a new source file using your module name in the 'libs/search' directory.
+
+      cd /path/to/dgssearch/libs/search
+      vi body.php
+
+   2. Add a function that matches your module name and save.
+
+      <?php
+
+      function body($retVal, $q, $r, $o, $s, $c) {
+         /* Add one item. */
+         $retVal[] = array('link' => 'Loose Change', 'url' => 'http://www.domain.com', 'description' => 'You found 3 gold and 1 silver.', 'source' => 'body');
+         /* Return items. */
+         return $retVal;
+      }
+
+      ?>
+
+   3. Edit config.php in the 'config' directory and enable your module.
+
+      cd /path/to/dgssearch/config
+      vi config.php
+
+      Locate the $config['searchModules'] line, and add your modules name..
+
+      $config['searchModules']  = array('fs', 'body');
+
+   Thats it. You have created a simple module and enabled it.

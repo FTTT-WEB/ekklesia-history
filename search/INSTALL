@@ -1,0 +1,777 @@
+DGS Search v0.9.6 (02/07/01) - http://www.digitalgenesis.com
+
+Quick Install:
+
+  0. Untar the distribution into your websites tree. It will create a dgssearch
+     directory. Several examples follow:
+
+     For .tar.gz files:
+       tar xvzf dgssearch-0.9.6.tar.gz
+        -or-
+       zcat dgssearch-0.9.6.tar.gz | tar xvf -
+
+     For .tar.bz2 files:
+       tar xvIf dgssearch-0.9.6.tar.bz2
+        -or-
+       tar xvf dgssearch-0.9.6.tar.bz2 --with-compress-program=bzip2
+        -or-
+       bzcat dgssearch-0.9.6.tar.bz2 | tar xvf -
+
+     For .zip files:
+       pkunzip -x dgssearch-0.9.6.zip
+        -or-
+       Use WinZip or other GUI zip program.
+
+  1. Open and configure config.php as needed (in the config directory).
+     Most options are described to the right of the option.
+
+     The options that need to be changed to use only the filesystem search are:
+
+       $config["installBase"]     /* Where the package was installed. */
+       $config["fileSeparator"]   /* File separator for your OS. Is "\\" on Windows. */
+       $config["urlBase"]         /* The base URL for your site. */
+       $config["siteBase"]        /* The directory that corresponds to the URL base. */
+       $config["fsBase"]          /* Where we should begin searching the filesystem. */
+       $config["cacheFile"]       /* The full path to the cache file. */
+
+     NOTE: If you are using a Windows platform, please make sure you are
+           using two backslashes in all paths (ie: c:\\inetpub\\wwwroot).
+
+     If you will also be using the database search, make sure to add "db" to the
+     $config["searchModules"]. The example below has both the "fs" and "db" search
+     modules enabled.
+
+       $config["searchModules"] = array("fs", "db");
+
+     See the documentation on $database[x] further down in this document for more
+     information on how to use the database search.
+
+  2. Test your install. Use the included index.php file as a quick test.
+
+     NOTE: If you have SAFE MODE enabled, you will need to make sure the files
+           that DGS Search will be reading are owned by the user that your web
+           server is running as. For more information on SAFE MODE, see the
+           PHP documentation.
+
+     NOTE: If DGS Search is gives the error 'Error: Must specify a query.',
+           verify in php.ini that the option 'register_globals = On'.
+
+Configuration:
+
+  config.php - This file contains all configuration options for DGS Search.
+
+  Below is a full list of options and descriptions of how they work:
+
+  General Options
+  ---------------
+
+    $config["installBase"] - Datatype: (String) - Ex: "/usr/local/apache/htdocs/dgssearch"
+
+      The directory that DGS Search was installed into.
+
+
+    $config["searchModules"] - Datatype: (Array of String) - Ex: array("fs", "db");
+
+      The modules to use for your searches. Currently the "fs" and "db" modules are
+      included with the distribution. Feel free to write additional modules.
+
+      Modules will be called in the same order they appear within the modules array.
+
+      Search modules are nothing more than a php source file in the 'libs/search'
+      directory containing a function of the same name. See MODULES for more
+      information on modules.
+
+      Search module "fs" handles filesystem searches.
+
+      Search module "db" handles database searches. See the documentation on
+      $database[x] further down on how to use the database search.
+
+
+    $config["displayModules"] - Datatype: (Array of String) - Ex: array("nav", "results");
+
+      The modules to display search results. Currently the display modules included with
+      the distribution are: title, query, stats, hr, nav, results
+
+      Feel free to write additional modules.
+
+      Modules will be called in the same order they appear within the modules array.
+      Modules can be called more than once. For example "nav" is called twice in the
+      supplied config.php.
+
+      Display modules are nothing more than a php source file in the 'libs/display'
+      directory containing a function of the same name. See MODULES for more
+      information on modules.
+
+      Display module "title" adds the title to the display results page. The title used can
+      be changed using the $config["displayHeader"] option in config.php. If you remove
+      "title" from the $config["displayModules"] array it will no longer be displayed.
+
+      Display module "query" adds a query field to the display results page. If you remove
+      "query" from the $config["displayModules"] array it will no longer be displayed.
+
+      Display module "stats" adds a statistics on the search being performed to the display
+      results page. If you remove "stats" from the $config["displayModules"] array it will
+      no longer be displayed.
+
+      Display module "hr" adds a horizontal line to the display results page. If you remove
+      "hr" from the $config["displayModules"] array it will no longer be displayed.
+
+      Display module "nav" adds result navigation to the display results page. This allows
+      you to page through groups of results. If you remove "nav" from the
+      $config["displayModules"] array it will no longer be displayed.  
+
+      Display module "results" adds the results themselves to the display results page. If
+      you remove "results" from the $config["displayModules"] array it will no longer be
+      displayed. Generally this module will always be used or will be replace to display
+      search results in a different way. For example, if you were searching a catalog
+      database, you may want to create a new module to display the results similar to a
+      shopping cart.
+
+
+    $config["language"] - Datatype: (String) - Ex: "english"
+
+      The language pack DGS Search will use on the query and results page.
+
+      There is currently support for the following languages:
+
+         English
+         German
+         Spanish
+
+       To add support for an additional language, use "english.php" in the
+       "dgssearch/libs/language" directory as a template. Simply copy the template
+       to "yourlanguage.php" where "yourlanguage" is the name of your language and
+       translate. Variables within the strings take the form of @VARIABLE@. They are
+       replaced automatically by the display modules.
+
+       If you translate a new language or make a correction within an existing one,
+       please email a copy of the language file to search@digitalgenesis.com. We will
+       include new languages in future releases.
+
+
+    $config["fileSeparator"] - Datatype: (String) - Ex: "/"
+
+      The separator used in your filesystem. UNIX based systems use '/'.
+      DOS/Win based systems use '\\'. Must be '\\' since '\' is the escape character.
+
+
+    $config["header"] - Datatype: (String) - Ex: "config/header.php"
+
+      The file that is used for the header on the results page.
+
+
+    $config["footer"] - Datatype: (String) - Ex: "config/footer.php"
+
+      The file that is used for the footer on the results page.
+
+
+    $config["target"] - Datatype: (String) - Ex: "_self"
+
+      The target refers to the target frame for links. If you are not using
+      frame sets, "_self" is correct. If you have a specific target frame,
+      specify it here.
+
+
+    $config["fonts"] - Datatype: (String) - Ex: "Arial, Sans-Serif, Helvetica"
+
+      The fonts to be used on the Display Results page.
+
+
+    $config["headerColor"] - Datatype: (String) - Ex: "666699"
+
+      This is the color used for the header or title on the Display Results
+      page. This can be any valid HTML color, either keywords like "blue" or
+      RGB values like "666699".
+
+
+    $config["navColor"] - Datatype: (String) - Ex: "008000"
+
+      This is the color used for the navigation sections on the Display
+      Results page. This can be any valid HTML color, either keywords like
+      "blue" or RGB values like "008000".
+
+
+    $config["infoBarColor"] - Datatype: (String) - Ex: "008000"
+
+      This is the color used for the information bar on the Display Results
+      page. This can be any valid HTML color, either keywords like "blue" or
+      RGB values like "008000".
+
+
+    $config["infoBar"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, a information bar will appear below each results
+      description on the results page. You can customize the information
+      bar with the "infoBarFormat" option below.
+
+
+    $config["infoBarFormat"] - Datatype: (String) - Ex: "@URL@ @DASH-SIZE@ @SIZE2@"
+
+      The "infoBarFormat" field is used to build the information bar that appears
+      below descriptions on the results page. The following variables are
+      currently available:
+
+         @HOST@         - The links hostname. (ie: www.xyz.com)
+         @URL@          - The links hostname. (ie: www.xyz.com/index.php)
+         @FULLURL@      - The links full URL. (ie: http://www.xyz.com/index.php)
+         @DASH-URL@     - Displays a dash if @URL@, @FULLURL@ or @HOST@ contains a value.
+         @SIZE@         - The filesize in KB for filesystem matches to 0 decimals.
+         @SIZE1@        - The filesize in KB for filesystem matches to 1 decimals.
+         @SIZE2@        - The filesize in KB for filesystem matches to 2 decimals.
+         @DASH-SIZE@    - Displays a dash if @SIZE@ contains a value.
+         @LASTMOD@      - The last modification date.
+         @DASH-LASTMOD@ - Displays a dash if @LASTMOD@ contains a value.
+         @TARGET@       - The value stored in $config['target'].
+         @DASH-TARGET@  - Displays a dash if @TARGET@ contains a value.
+
+
+    $config["dateFormat"] - Datatype: (String) - Ex: "M j, Y H:i:s"
+
+      Date format string used to generate Last Modified on Display Results.
+      See the PHP documentation on the date() function for more details.
+
+
+    $config["results"] - Datatype: (Integer) - Ex: 10
+
+      The default number of results to display per page. When set to 0, all
+      results will be displayed on one page. This will be used if 'r' is not
+      specified in the call to search.php as shown in the example below:
+
+      http://www.xyz.com/dgssearch/search.php?q=keyword&r=10
+
+
+    $config["boldQuery"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, the search word(s) will be bolded in the description on
+      the results page.
+
+
+    $config["timed"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, the results page will include the time taken to search.
+
+
+    $config["maxSearchTime"] - Datatype: (Float) - Ex: 25
+
+      The maximum amount of time to spend searching. When the time limit
+      expires, the module will exit early reporting only the results it had
+      located so far. PHP by default will only allow a script to run for
+      30 seconds (configurable in php.ini on UNIX platforms.)
+
+      Set to 0 to disable this feature.
+
+      NOTE: Database searches can only be interrupted between searches, which
+            means it may take longer than expected to exit the "db" module.
+
+
+    $config["translate"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, each result will include a link to the translation service
+      at http://babel.altavista.com. The $config["translateFrom"] option will
+      set the default translation to be done.
+
+      NOTE: Users will still need to hit the button "Translate" at that site.
+
+
+    $config["translateFrom"] - Datatype: (String) - Ex: en_de
+
+      This is the default translation to be done at http://babel.altavista.com.
+      The currently available translation options are listed below:
+
+        en_fr - English to French
+        en_de - English to German
+        en_it - English to Italian
+        en_pt - English to Portuguese
+        en_es - English to Spanish
+        fr_en - French to English
+        de_en - German to English
+        it_en - Italian to English
+        pt_en - Portuguese to English
+        es_en - Spanish to English
+        de_fr - German to French
+        fr_de - French to German
+        ru_en - Russian to English
+
+
+    $config["verifyConfig"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, the config file is verified each time DGS Search is run. 
+
+      This feature can be disabled for a small speed increase once your config
+      is known to be valid.
+
+      NOTE: If debug is enabled, verifyConfig will be enabled automatically.
+
+
+    $config["warn"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, warnings will be displayed on the results page.
+      The most common use of this function is to allow SAFE MODE warnings
+      to be displayed, so they can be fixed. Most of these will be caused
+      by the script being owned by a different user than the files you
+      will be searching.
+
+      NOTE: If debug is enabled, warn will be enabled automatically.
+
+
+    $config["debug"] - Datatype: (Boolean) - Ex: false
+
+      If set to true, debugging information will be displayed on the results
+      page. This can often help track down configuration errors.
+
+
+    $config["remoteDebug"] - Datatype: (Boolean/String) - Ex: false
+
+      If set to true, a remote site will be able to see debugging information
+      using specialized parameters passed to search.php. This is useful on live
+      sites, since normal users won't see debugging information.
+
+      When set to true, you can use this options as follows:
+
+         http://www.xyz.com/dgssearch/search.php?q=word&debug=true
+
+      If you would like to set a password for this feature, rather than setting
+      true, set it to a string value which will act as your password. Below is
+      an example of setting a password:
+
+         $config["remoteDebug"] = "myPassword";
+
+      When a password is set, you can use this option as follows:
+
+         http://www.xyz.com/dgssearch/search.php?q=word&debug=myPassword
+
+      Generally you will want this feature disabled (set to false), as it allows
+      the remote site to collect information about your install of PHP and how
+      DGS Search is configured on your system. If you are paranoid about this
+      feature, remove the function remoteDebug() from 'dgssearch/libs/utils.php'.
+
+      When remote debug is enabled, you will be able to use its extended features.
+      Below are examples of how to use these features:
+
+         PHP Information
+
+            http://www.xyz.com/dgssearch/search.php?q=word&debug=true&option=phpinfo
+
+         DGS Search Configuration Information
+
+            http://www.xyz.com/dgssearch/search.php?q=word&debug=true&option=config
+
+         Misc Tests Information
+
+            http://www.xyz.com/dgssearch/search.php?q=word&debug=true&option=test
+
+         Ash Quote
+
+            http://www.xyz.com/dgssearch/search.php?q=word&debug=true&option=ash
+
+         All Information (All options)
+
+            http://www.xyz.com/dgssearch/search.php?q=word&debug=true&option=all
+
+
+    $config["hideCredits"] - Datatype: (Boolean) - Ex: false
+
+      If set to true, the string "DGS Search" and link to our site will be
+      removed from the bottom of the results page. We would like to ask that
+      you leave this option set to false, as makes it easy for others to 
+      locate DGS Search.
+
+
+   Filesystem Options
+   ------------------
+
+    $config["urlBase"] - Datatype: (String) - Ex: "http://www.digitalgenesis.com"
+
+      The base URL for your site. The URL will be used to generate links to your 
+      search results.
+
+
+    $config["siteBase"] - Datatype: (String) - Ex: "/usr/local/apache/htdocs"
+
+      The directory that corresponds to the URL base.
+
+
+    $config["fsBase"] - Datatype: (String) - Ex: "/usr/local/apache/htdocs"
+
+      The directory on your local filesystem to begin searching.
+
+
+    $config["fsExclude"] - Datatype: (Array of String) - Ex: array("^\.ht", "secret.txt")
+
+      A list of directories or files that should be excluded from your search.
+      Entries are treated as regular expressions.
+
+      This option will take precedence over $config["exts"] option. This allows
+      you to include all ".html" files, but a specific file like "secret.html".
+
+      NOTE: If an entry is not an absolute path, the entry is compared relative
+            to the directory DGS Search is currently processing. For example, if
+            you list 'images' and '\.gif$' to be excluded, any directory named
+            'images' and any file ending in ".gif" will be excluded.
+
+
+    $config["cacheFile"] - Datatype: (String) - Ex: "/tmp/dgssearch.cache"
+
+      Cache file to be used for storing the filenames that will be searched.
+      Use of a cache file speeds up filesystem searches, since DGS Search
+      won't need to scan the filesystem for ever search request. On Windows
+      platforms, this should be set to "c:\\temp\\dgssearch.cache" or
+      another temporary directory.
+
+
+    $config["cacheTTL"] - Datatype: (Integer) - Ex: 3600
+
+      The time to live (TTL) in seconds for the filesystem cache file.
+      When the cache file becomes older than the TTL, DGS Search will scan the
+      filesystem and generate a new cache file. If the TTL is set to 0, then
+      filesystem caching will be disabled.
+
+      If the HTML on your site doesn't change very often, you may want to set
+      the TTL up to 86400 (1 day) or higher to keep DGS Search from rebuilding
+      the cache file so often.
+
+
+    $config["maxFileSize"] - Datatype: (Integer) - Ex: 51200
+
+      The maximum filesize in bytes that DGS Search will search. If the file
+      is larger than the specified size, it will be skipped. This gives you
+      a way to exclude files that are not searchable in a reasonable amount
+      of time.
+
+
+    $config["metaDesc"] - Datatype: (Boolean) - Ex:  false
+
+      If set to true, DGS Search will attempt to extract the META 'description'
+      from files rather than a context description. If no META tag is available
+      it will fall back to the normal context descriptions.
+
+      NOTE: This feature will slow down searches slightly. It will also truncate
+            longer descriptions down to one line.
+
+
+    $config["stripTags"] - Datatype: (Boolean) - Ex:  true
+
+      If set to true, all HTML and PHP tags will be stripped from files before
+      they are searched for a query. If set to false, the actual HTML and PHP
+      code could be found and displayed in the descriptions on the Search Results
+      page, possibly exposing passwords or other sensitive information.
+
+
+    $config["followLinks"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, SymLinks will be followed on systems that support SymLinks.
+      On systems that lack the is_link() function, this setting will be ignored.
+
+
+    $config["frameSet"] - Datatype: (Boolean) - Ex: false
+
+      If set to true, DGS Search will attempt to provide a link to the frame set,
+      rather than the automatically generated documents that are embedded in the
+      frame sets. If set to false, no substitutions will be made.
+
+      The schemes schemes currently supported are:
+
+         Files named 'xy-[0-9]+.html?' are replaced with 'xy.html', if it exists.
+
+         Files named 'xy/[0-9]+.html?' are replaced with 'xy/xy.html', if it exists.
+
+
+    $config["exts"] - Datatype: (Array of String) - Ex: array("html", "php3?", "txt")
+
+      A list of extensions that will determine what files in your site are
+      searched. Regular expressions can be used to include groups of
+      extensions into one entry. For example, 'html?' will include all "htm" and
+      "html" files within your searches.
+
+      The $config["fsExclude"] option will take precedence over this option. This
+      allows you to include all ".html" files, but a specific file like "secret.html".
+
+      NOTE: If this option is set to "" or undefined, then DGS Search will read all
+            files within a directory, regardless of the file extension.
+
+      NOTE: Do not place a leading dot before extensions unless you are intentionally
+            using the dot as a regular expression wildcard character.
+
+
+    $config["docExts"] - Datatype: (Array of String) - Ex: array("pdf", "doc", "ps")
+
+      A list of extensions to build a link to rather than the actual HTML or text
+      document that was searched.
+
+      This features allows you to locate results that are plain text, such as PDF,
+      Word Documents, and Postscript files.
+
+      For example, if DGS Search determines that the file 'manual.txt' matches your
+      search and there is a file named 'manual.pdf' in the same directory, the results
+      page will contain a link the file 'manual.pdf' rather than the file it searched.
+
+      DGS Search will prefer document extensions in the order they are listed within
+      'docExts' array. If 'pdf' was listed first in the array and there was a 'pdf'
+      and a 'ps' file in a directory, the 'pdf' file would be used on the results page.
+
+      NOTE: If this option is set to "" or undefined, then DGS Search will not do any
+            substitutions on the results page.
+
+      NOTE: DGS Search will not do any document conversion for you. You must generate
+            text files from your own 'pdf', 'doc', or 'ps' files. Many Linux distributions
+            include the program 'ps2ascii' which can be used to convert 'pdf' and 'ps'
+            documents into text. Another program called 'pstotext' is also available.
+
+
+    $config["descWidth"] - Datatype: (Integer) - Ex: 80
+
+      The width or string length of the description on the Search Results page.
+
+
+    $config["descHeight"] - Datatype: (Integer) - Ex: 2
+
+      The height of number of lines of description to be displayed on the Search
+      Results page.
+
+
+    $config["descEnd"] - Datatype: (String) - Ex: "..."
+
+      The string that to be added to the beginning and end of the description.
+
+
+  Database Options
+  ----------------
+
+    NOTE: The 'x' in $database[x]["keyword"] should be replace with an integer
+          value such as 0, 1, 2, etc. This allows searching of multiple databases
+          or tables within a database.
+
+    $database[x]["type"] - Datatype: (String) - Ex: "mysql"
+
+      This is the database type. This can be different on each database entry.
+      Currently supported types are: mysql, pgsql, mssql, odbc and ibase.
+
+
+    $database[x]["server"] - Datatype: (String) - Ex: "localhost"
+
+      The hostname, IP address or PIPE name of the SQL server.
+
+      NOTE: This options is ignored if $database[x]["type"] is set to 'odbc'.
+
+      NOTE: If you are connecting to a local MSSQL server, use the PIPE name,
+            localhost or 127.0.0.1 won't work. (At least on our test server.)
+            Your interface IP address will also work.
+
+      NOTE: If $database[x]["type"] is set to 'ibase', then server must be set
+            specific to the type of connection you are making to your server.
+            See the below examples:
+
+               For a TCP/IP connection to your InterBase server, "server" must
+               be set to the hostname or IP address followed by a colon, such
+               as "hostname:" or "10.1.1.10:".
+
+               For a NetBEUI connection to your InterBase server, "server" must
+               be set to a NetBEUI hostname path, such as "//hostname/".
+
+               For a IPX/SPX connection to your InterBase server, "server" must
+               be set to the IPX/SPX hostname followed by the @ symbol, such as
+               "hostname@".
+
+               For a connection to a InterBase database on the same server,
+               "server" can be set to the empty string, such as "".
+
+
+    $database[x]["port"] - Datatype: (Integer) - Ex: 3306
+
+      The TCP/UDP port to use when communicating with the server. If set to
+      0, the default port will be used. The ODBC database type will ignore
+      this option.
+
+
+    $database[x]["username"] - Datatype: (String) - Ex: "username"
+
+      The username used to connect to your database. Set to an empty string
+      if your database uses no username.
+
+
+    $database[x]["password"] - Datatype: (String) - Ex: "password"
+
+      The password used to connect to your database. Set to an empty string
+      if your database uses no password.
+
+
+    $database[x]["database"] - Datatype: (String) - Ex: "database"
+
+      The name of the database or DSN to connect to and search.
+
+
+    $database[x]["persistent"] - Datatype: (Boolean) - Ex: true
+
+      If set to true, persistent database connections will be used.
+      Non-persistent connections are slower, but may be needed for compatibility
+      with some databases. (For example, MSSQL's ODBC driver isn't able to
+      handle parallel selects on a persistent connection.)
+
+      If you begin to get SQL errors while multiple searches are being processed
+      at the same time, turn persistent connection off. It should clear up the
+      problem.
+
+
+    $database[x]["table"] - Datatype: (Array of String) - Ex: array("article", "magazine")
+
+      The name of the table(s) in your database to search. In most cases, you will only be
+      searching one table.
+
+      If more than one table is listed in the "table" array, then DGS Search will attempt to do
+      an SQL join based on $database[x]["tableAssoc"].
+
+      If you had the SQL statement:
+
+        SELECT * FROM article, magazine WHERE field = 1;
+
+      The "table" array is used to build the "article, magazine" section of that statement.
+
+
+    $database[x]["tableAssoc"] - Datatype: (String) - Ex: "article.magazineid = magazine.magazineid"
+
+       A string of rules for associating the records in multiple tables. If you
+       are only searching one table, set this value to the empty string.
+
+       If you had the SQL statement:
+
+         SELECT * FROM article, magazine WHERE article.magazineid = magazine.magazineid;
+
+       The "tableAssoc" is used to build the "article.magazineid = magazine.magazineid" section
+       of that statement.
+
+
+    $database[x]["returnField"] - Datatype: (Array of String) - Ex: array("author", "title", "mag_name", "articleid")
+
+      The fields returned from the database. These fields can be used to substitute
+      into the URL and description. The fields are referred to in the same order
+      they are listed within the array, starting from 0. The first field 'author'
+      would be referred to as '@0@'. The second field 'title' would be referred to as
+      @1@. The third field 'mag_name' would be '@2@', etc.
+
+      If you had the SQL statement:
+
+        SELECT author, title, mag_name, articleid FROM table WHERE articleid = 1;
+
+      The "returnField" array is used to build the "author, title, mag_name, articleid"
+      section of that statement. It determines what data from the database you can use to
+      build your "link", "url" and "desc" on the results page.
+
+
+    $database[x]["searchField"] - Datatype: (Array of String) - Ex: array("title")
+
+      The field(s) to search within your table. These are the fields DGS Search will search to
+      locate results.
+
+      If you had the SQL statement:
+
+        SELECT articleid, title FROM table WHERE title = "Rings";
+
+      The "searchField" array is used to build the "title = Rings" section of that statement.
+
+
+    $database[x]["link"] - Datatype: (String) - Ex: "Article name is '@1@'"
+
+      The descriptive link on the Search Results page. Variables '@0@', '@1@', etc. can
+      be used within the string to produce dynamic content. The variables refer to the
+      fields within the $database[x]["returnField] array, counting up from 0.
+
+
+    $database[x]["url"] - Datatype: (String) - Ex: "http://www.xyz.com/bogus.php?id=@3@"
+
+      The URL to your page that displayed the data from the database. Variables '@0@',
+      '@1@', etc. can be used within the string to produce a dynamic URL. The variables
+      refer to the fields within the $database[x]["returnField] array, counting up from 0.
+
+      NOTE: The file bogus.php is not included and is just an example. You must create
+            your own page to display what DGS Search finds in your database. (You would
+            not believe how many people don't get this.)
+
+
+    $database[x]["desc"] - Datatype: (Array of String) - Ex: array("@1@ was published in @2@.", "Authored by @0@.")
+
+      The description displayed below the link on the Search Results page. Each string in the
+      array will be a different line in the description. Variables '@0@', '@1@', etc. can be
+      used within the string to produce dynamic content. The variables refer to the fields
+      within the $database[x]["returnField] array, counting up from 0.
+
+
+    $database[x]["descWidth"] - Datatype: (Integer) - Ex: 80
+
+      The width or string length of the description on the Search Results page. This is set
+      on a per database basis.
+
+      Set to 0 to disable this feature.
+
+
+    $database[x]["wildcard"] - Datatype: (String) - Ex: "Both"
+
+      This setting determines how DGS Search will search your database for the
+      query. Supported options are: None, Left, Right or Both. If set to None,
+      the query will match whole words only. If set to both, then the query will
+      be treated as a substring. Left and Right will cause wildcard character to
+      be placed on the corresponding side.
+
+      For those familiar with SQL, setting None results in the following statement:
+
+      SELECT * FROM table WHERE field = 'query'
+
+      Setting Both results in the following statement (% is the wildcard character):
+
+      SELECT * FROM table WHERE field LIKE '%query%'
+
+      Setting Left results in the following statement:
+
+      SELECT * FROM table WHERE field LIKE '%query'
+
+      Setting Right results in the following statement:
+
+      SELECT * FROM table WHERE field LIKE 'query%'
+
+
+    $database[x]["orderByDepth"] - Datatype: (Integer) - Ex: 2
+
+      The order by depth sets the number of result fields to use when ordering the
+      results from the database. The default of -1, will use all result fields to
+      order the results. If set to 2, then only the first two result fields are
+      used to order the results. If you are working with a large database, this
+      setting may help you speed searches. The more fields you order by, the
+      longer a result set usually takes.
+
+
+    $database[x]["forceLower"] - Datatype: (Boolean) - Ex: false
+
+      Forces a case-insensitive search by lowercasing everything. Most databases default
+      to case-insensitive searches, so this option should generally be set to false. This
+      feature uses the SQL function LOWER() or LCASE() available with most SQL servers.
+
+
+   Constants
+   ---------
+
+  NOTE: These options generally don't need to be changed.
+
+    $config["version"] - Datatype: (String) - Ex: "v0.9.4"
+
+      The current version of DGS Search.
+
+
+    $config["maxResults"] - Datatype: (String) - Ex: 65535
+
+      The total number of results that can be displayed per page. This value is
+      used internally to allow all results to be displayed on one page, if results
+      is set to 0.
+
+
+    $config["extSeparator"] - Datatype: (String) - Ex: "."
+
+      The file extension separator used to in your filesystem.
+
+
+    $config["thisDir"] - Datatype: (String) - Ex: "."
+
+      The string used in denote the current directory.
+
+
+    $config["parentDir"] - Datatype: (String) - Ex: ".."
+
+      The string used in denote the parent directory.

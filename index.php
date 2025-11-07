@@ -1,0 +1,90 @@
+<html>
+
+<head>
+  <title>古教會歷史</title>
+  <META content=優西比烏，耶穌，希律，約翰的浸，羅馬帝國，Edassa，彼拉多，門徒，預言，教父，奧古斯丁，亞他那修，使徒，保羅 name=description>
+  <meta http-equiv="Content-Type" content="text/html; charset=big5">
+  <meta name="description" content="Fireworks Splice HTML">
+  <script language="JavaScript"><!--hide this script from non-javascript-enabled browsers
+
+function MM_findObj(n, d) { //v3.0
+var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+/* Functions that swaps images. */
+    function MM_swapImage() { //v3.0
+      var i, j = 0, x, a = MM_swapImage.arguments; document.MM_sr = new Array; for (i = 0; i < (a.length - 2); i += 3)
+        if ((x = MM_findObj(a[i])) != null) { document.MM_sr[j++] = x; if (!x.oSrc) x.oSrc = x.src; x.src = a[i + 2]; }
+    }
+    function MM_swapImgRestore() { //v3.0
+      var i, x, a = document.MM_sr; for (i = 0; a && i < a.length && (x = a[i]) && x.oSrc; i++) x.src = x.oSrc;
+    }
+
+    /* Functions that handle preload. */
+    function MM_preloadImages() { //v3.0
+      var d = document; if (d.images) {
+        if (!d.MM_p) d.MM_p = new Array();
+        var i, j = d.MM_p.length, a = MM_preloadImages.arguments; for (i = 0; i < a.length; i++)
+          if (a[i].indexOf("#") != 0) { d.MM_p[j] = new Image; d.MM_p[j++].src = a[i]; }
+      }
+    }
+
+    // stop hiding --></script>
+</head>
+
+<body bgcolor="#000000" onLoad="MM_preloadImages('image/frontpage/frontpage_r2_c2_f2.jpg')">
+  <center>
+    <!-------------------------- BEGIN COPYING THE HTML HERE ---------------------------->
+    <table border="0" cellpadding="0" cellspacing="0" width="750">
+      <!-- fwtable fwsrc="history02new.png" fwbase="frontpage.jpg" -->
+      <tr>
+        <td><img src="image/frontpage/shim.gif" width="120" height="1" border="0"></td>
+        <td><img src="image/frontpage/shim.gif" width="190" height="1" border="0"></td>
+        <td><img src="image/frontpage/shim.gif" width="440" height="1" border="0"></td>
+        <td><img src="image/frontpage/shim.gif" width="1" height="1" border="0"></td>
+      </tr>
+      <tr valign="top">
+        <td colspan="3"><img name="frontpage_r1_c1" src="image/frontpage/frontpage_r1_c1.jpg" width="750" height="300"
+            border="0"></td>
+        <td><img src="image/frontpage/shim.gif" width="1" height="300" border="0"></td>
+      </tr>
+      <tr valign="top">
+        <td rowspan="2"><img name="frontpage_r2_c1" src="image/frontpage/frontpage_r2_c1.jpg" width="120" height="226"
+            border="0"></td>
+        <td><a href="big5/index.html" onMouseOut="MM_swapImgRestore();"
+            onMouseOver="MM_swapImage('frontpage_r2_c2','','image/frontpage/frontpage_r2_c2_f2.jpg',1)"><img
+              name="frontpage_r2_c2" src="image/frontpage/frontpage_r2_c2.jpg" width="190" height="181" border="0"></a>
+        </td>
+        <td rowspan="2"><img name="frontpage_r2_c3" src="image/frontpage/frontpage_r2_c3.jpg" width="440" height="226"
+            border="0"></td>
+        <td><img src="image/frontpage/shim.gif" width="1" height="181" border="0"></td>
+      </tr>
+      <tr valign="top">
+        <td><img name="frontpage_r3_c2" src="image/frontpage/frontpage_r3_c2.jpg" width="190" height="45" border="0">
+        </td>
+        <td><img src="image/frontpage/shim.gif" width="1" height="45" border="0"></td>
+      </tr>
+    </table>
+    <font color="#FFFFFF">
+      <!--------------------------- STOP COPYING THE HTML HERE --------------------------->
+      你是第
+      <?php $type = "gfx";
+      $dir = "./image/counter";
+      include("count.php"); ?>
+      位來賓
+    </font>
+  </center>
+</body>
+<script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+  try {
+    var pageTracker = _gat._getTracker("UA-11132420-2");
+    pageTracker._trackPageview();
+  } catch (err) { }</script>
+
+</html>
