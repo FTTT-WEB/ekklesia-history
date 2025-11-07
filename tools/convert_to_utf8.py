@@ -72,8 +72,14 @@ def process_file(path: Path, apply: bool):
             decode_error = e
             text = None
 
+    # If declared/fallback encodings failed, but the bytes are actually valid UTF-8,
+    # treat the file as already UTF-8 and simply update the meta tag.
     if text is None:
-        return False, f'decode-failed ({tried_enc}): {decode_error}'
+        try:
+            text = data.decode('utf-8')
+            # proceed — we'll update meta tag but not re-decode/encode
+        except Exception:
+            return False, f'decode-failed ({tried_enc}): {decode_error}'
 
     new_text = replace_meta_charset(text)
 
