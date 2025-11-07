@@ -21,6 +21,12 @@ ENC_MAP = {
     b'gbk': 'gb18030',
 }
 
+# For cases where the declared encoding fails to decode, try these fallbacks
+FALLBACKS = {
+    'big5': ['big5hkscs', 'cp950', 'gb18030'],
+    'gb2312': ['gb18030', 'gbk'],
+}
+
 
 def detect_declared_charset(head_bytes: bytes):
     hb = head_bytes.lower()
@@ -52,10 +58,22 @@ def process_file(path: Path, apply: bool):
     if not src_enc:
         return False, None
 
-    try:
-        text = data.decode(src_enc)
-    except Exception as e:
-        return False, f'decode-failed: {e}'
+    decode_error = None
+    tried_enc = []
+    # try declared encoding first, then fallbacks
+    enc_candidates = [src_enc] + FALLBACKS.get(src_enc, [])
+    for enc in enc_candidates:
+        tried_enc.append(enc)
+        try:
+            text = data.decode(enc)
+            decode_error = None
+            break
+        except Exception as e:
+            decode_error = e
+            text = None
+
+    if text is None:
+        return False, f'decode-failed ({tried_enc}): {decode_error}'
 
     new_text = replace_meta_charset(text)
 
